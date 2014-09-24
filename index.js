@@ -90,37 +90,36 @@ LogStorage.prototype.pack = function(level) {
 };
 
 LogStorage.prototype.upload = function(level, url, filename) {
-  var boundary = '----logstrageboundary';
   var logfile = this.pack(level);
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
+  if (typeof Blob === 'undefined') {
+    var boundary = '----logstrageboundary';
 
-  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
-  xhr.send([
-    '--' + boundary,
-    'Content-Disposition: form-data; name="file"; filename="' + filename + '"',
-    'Content-Type: text/plain',
-    '',
-    logfile,
-    '',
-    '--' + boundary + '--'
-  ].join('\n'));
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+
+    xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+    xhr.send([
+        '--' + boundary,
+        'Content-Disposition: form-data; name="file"; filename="' + filename + '"',
+        'Content-Type: text/plain',
+        '',
+        logfile,
+        '',
+        '--' + boundary + '--'
+        ].join('\n'));
+  } else {
+    var form = new FormData();
+    var blob = new Blob([logfile], { type: 'text/plain' });
+
+    form.append('file', blob, filename);
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', url);
+    xhr.send(form);
+  }
 };
-
-LogStorage.prototype.upload2 = function(level, url, filename) {
-  var logfile = this.pack(level);
-
-  var form = new FormData();
-  var blob = new Blob([logfile], { type: 'text/plain' });
-
-  form.append('file', blob, filename);
-
-  var xhr = new XMLHttpRequest();
-
-  xhr.open('POST', url);
-  xhr.send(form);
-}
 
 
 // main
@@ -137,4 +136,4 @@ while(n++ < 10) {
 }
 appLogger.error('e');
 
-appLogger.upload2(TRACE, 'http://localhost:8080/receive', 'browser.log');
+appLogger.upload(TRACE, 'http://localhost:8080/receive', 'browser.log');
