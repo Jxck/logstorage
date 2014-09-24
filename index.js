@@ -90,20 +90,22 @@ LogStorage.prototype.pack = function(level) {
 };
 
 LogStorage.prototype.upload = function(level, url) {
-  var boundary = '--logstrage';
+  var boundary = '----WebKitFormBoundaryQgCIV7W1WxKLHtbA';
+  var logfile = this.pack();
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type', 'mutipart/form-data; boundary=' + boundary);
+
+  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
   xhr.send([
-     boundary,
-     'Content-Disposition: form-data; name="file"; filename="blob"',
-     'Content-Type: text/plain',
-     '',
-     this.pack(level),
-     '',
-     boudary
-  ]);
+    '--' + boundary,
+    'Content-Disposition: form-data; name="file"; filename="log.txt"',
+    'Content-Type: text/plain',
+    '',
+    logfile,
+    '',
+    '--' + boundary + '--'
+  ].join('\n'));
 };
 
 
@@ -121,5 +123,4 @@ while(n++ < 10) {
 }
 appLogger.error('e');
 
-var pack = appLogger.pack(DEBUG);
-console.log(pack);
+appLogger.upload(TRACE, 'http://localhost:8080/receive');
