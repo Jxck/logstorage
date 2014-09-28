@@ -8,6 +8,7 @@ if (typeof localStorage === 'undefined' || localStorage === null) {
 
 function LogStorage(namespace) {
   this.namespace = namespace;
+  this.db = localStorage;
 }
 
 LogStorage.prototype.set = function(key, value) {
