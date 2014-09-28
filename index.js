@@ -119,3 +119,5 @@ LogStorage.prototype.upload = function(level, url, filename, options) {
     xhr.send(form);
   }
 };
+
+this.LogStorage = LogStorage;
