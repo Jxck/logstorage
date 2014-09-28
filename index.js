@@ -2,7 +2,6 @@ var TRACE = 'TRACE',
     DEBUG = 'DEBUG',
     ERROR = 'ERROR';
 
-
 if (typeof localStorage === 'undefined' || localStorage === null) {
   localStorage = require('localStorage');
 }
@@ -63,9 +62,6 @@ LogStorage.prototype.write = function(level, args) {
     timestamp += '#';
   }
 
-  // DEBUG
-  logObj.message = timestamp;
-
   this.set(timestamp, logObj);
 };
 
@@ -89,15 +85,22 @@ LogStorage.prototype.pack = function(level) {
              }).join('\n');
 };
 
-LogStorage.prototype.upload = function(level, url, filename) {
+LogStorage.prototype.upload = function(level, url, filename, options) {
   var logfile = this.pack(level);
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('POST', url);
+
+  if (options) {
+    if (options.headers) {
+      for (h in options.headers) {
+        xhr.setRequestHeader(h, options.headers.h);
+      }
+    }
+  }
 
   if (typeof Blob === 'undefined') {
     var boundary = '----logstrageboundary';
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
-
     xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
     xhr.send([
         '--' + boundary,
@@ -113,10 +116,6 @@ LogStorage.prototype.upload = function(level, url, filename) {
     var blob = new Blob([logfile], { type: 'text/plain' });
 
     form.append('file', blob, filename);
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', url);
     xhr.send(form);
   }
 };
@@ -124,16 +123,19 @@ LogStorage.prototype.upload = function(level, url, filename) {
 
 // main
 
-var appLogger = new LogStorage('app');
+(function sample() {
+  var appLogger = new LogStorage('app');
 
-appLogger.clear();
-appLogger.debug('b', 'd');
-appLogger.debug('b', 'd');
+  appLogger.clear();
+  appLogger.debug('b', 'd');
+  appLogger.debug('b', 'd');
 
-var n = 0;
-while(n++ < 10) {
-  appLogger.trace('a', 1, 20);
-}
-appLogger.error('e');
+  var n = 0;
+  while(n++ < 10) {
+    appLogger.trace('a', 1, 20);
+  }
+  appLogger.error('e');
 
-appLogger.upload(TRACE, 'http://localhost:8080/receive', 'browser.log');
+  console.log("up");
+  appLogger.upload(TRACE, 'http://localhost:8080/receive', 'browser.log', 'dummyauth');
+})()
