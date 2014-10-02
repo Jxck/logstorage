@@ -7,6 +7,8 @@ var gulp = require('gulp')
   , connect = require('gulp-connect')
   , typescript = require('gulp-tsc')
   , rimraf = require('gulp-rimraf')
+  , rename = require('gulp-rename')
+  , browserify = require('gulp-browserify');
   ;
 
 gulp.task('lint', function() {
@@ -38,12 +40,21 @@ gulp.task('server', function() {
 });
 
 gulp.task('compile', function () {
-  return gulp.src(['src/*.ts'])
+  return gulp.src(['index.ts'])
     .pipe(typescript())
-    .pipe(gulp.dest('dest/'));
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('build', ['compile'], function() {
+  return gulp.src('index.js')
+    .pipe(browserify({
+      standalone: 'LogStorage'
+    }))
+    .pipe(rename('build.js'))
+    .pipe(gulp.dest('.'));
 });
 
 gulp.task('clean', function () {
-  return gulp.src('dest/*.js', { read: false })
+  return gulp.src('index.js', { read: false })
     .pipe(rimraf({ force: true }));
 });
