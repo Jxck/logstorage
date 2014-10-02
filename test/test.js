@@ -1,5 +1,11 @@
-var assert = require('assert');
-var LogStorage = require('../index').LogStorage;
+var assert;
+
+if (typeof module !== 'undefined') { // for node
+  assert = require('assert');
+  localStorage = require('localStorage');
+  LogStorage = require('../').LogStorage;
+}
+
 describe('logstorage', function(){
   var namespace, logStorage;
   beforeEach(function() {
@@ -42,16 +48,8 @@ describe('logstorage', function(){
   });
 
   it('#each', function() {
-    var max = 10;
-    for(var i = 0; i < max; i++) {
-      logStorage.set(i, i + 'a');
-    }
-
-    var j = 0;
     logStorage.each(function(k, v) {
-      assert.deepEqual(k, j);
-      assert.deepEqual(v, j + 'a');
-      j ++;
+      assert.deepEqual(k + 'a', v);
     });
   });
 });

@@ -1,0 +1,35 @@
+{
+  "name": "logstorage",
+  "version": "0.0.1",
+  "description": "store log to localstorage and upload to server as file",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo 'mocha-phantomjs' && mocha-phantomjs test/index.html && echo 'mocha' && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jxck/logstorage"
+  },
+  "keywords": [
+    "log",
+    "storage",
+    "localstorage"
+  ],
+  "author": "Jxck",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jxck/logstorage/issues"
+  },
+  "homepage": "https://github.com/Jxck/logstorage",
+  "dependencies": {
+    "localStorage": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "mocha-phantomjs": "^3.5.0",
+    "phantomjs": "^1.9.10"
+  }
+}

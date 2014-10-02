@@ -1,0 +1,24 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Log Storage Tests</title>
+  <link rel="stylesheet" href="mocha.css" />
+  <script src="mocha.js"></script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <script>mocha.setup('bdd')</script>
+  <script src="../index.js"></script>
+  <script src="assert.js"></script>
+  <script src="test.js"></script>
+  <script>
+    mocha.checkLeaks();
+    mocha.reporter('html');
+    if (window.mochaPhantomJS) {
+      mochaPhantomJS.run();
+    } else {
+      mocha.run();
+    }
+  </script>
+</body>
+</html>
