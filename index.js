@@ -94,7 +94,7 @@ LogStorage.prototype.upload = function(level, url, filename, options) {
 
   if (options) {
     if (options.headers) {
-      for (h in options.headers) {
+      for (var h in options.headers) {
         xhr.setRequestHeader(h, options.headers.h);
       }
     }
