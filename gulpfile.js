@@ -33,8 +33,7 @@ gulp.task('mocha-phantomjs', function () {
 
 gulp.task('server', function() {
   return connect.server({
-    port: 3000,
-    livereload: true
+    port: 3000
   });
 });
 
