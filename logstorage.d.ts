@@ -45,7 +45,7 @@ export declare module LogStorage {
         public worn(...args: any[]): void;
         public error(...args: any[]): void;
         public dump(level: Level): Message[];
-        private pack(messages);
+        public pack(messages: Message[]): string;
         public clear(): void;
     }
 }

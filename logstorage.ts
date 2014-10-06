@@ -111,14 +111,14 @@ export module LogStorage {
     }
 
     dump(level: Level): Message[] {
-      if (typeof level === 'undefined') {
+      if (typeof level === "undefined") {
         level = Level.TRACE;
       }
 
       var keys: string[] = [];
       var cache: any = {};
       var values: Message[] = [];
-      this.db.each(function(key, value) {
+      this.db.each((key: string, value: Message): void => {
         if (value.level > level) {
           return;
         }
@@ -128,17 +128,17 @@ export module LogStorage {
 
       keys.sort();
 
-      for (var k in keys) {
-        values.push(cache[keys[k]]);
+      for (var i: number = 0; i < keys.length; i++) {
+        values.push(cache[keys[i]]);
       }
 
-      return values
+      return values;
     }
 
-    private pack(messages: Message[]): string {
+    pack(messages: Message[]): string {
       return messages.map((m: Message): string => {
-        return [m.timestamp, Level[m.level], m.message].join(' ');
-      }).join('\n');
+        return [m.timestamp, Level[m.level], m.message].join(" ");
+      }).join("\n");
     }
 
     clear(): void {

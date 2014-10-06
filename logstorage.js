@@ -111,7 +111,7 @@
         };
 
         Logger.prototype.dump = function (level) {
-            if (typeof level === 'undefined') {
+            if (typeof level === "undefined") {
                 level = 0 /* TRACE */;
             }
 
@@ -128,8 +128,8 @@
 
             keys.sort();
 
-            for (var k in keys) {
-                values.push(cache[keys[k]]);
+            for (var i = 0; i < keys.length; i++) {
+                values.push(cache[keys[i]]);
             }
 
             return values;
@@ -137,8 +137,8 @@
 
         Logger.prototype.pack = function (messages) {
             return messages.map(function (m) {
-                return [m.timestamp, Level[m.level], m.message].join(' ');
-            }).join('\n');
+                return [m.timestamp, Level[m.level], m.message].join(" ");
+            }).join("\n");
         };
 
         Logger.prototype.clear = function () {
