@@ -3,7 +3,7 @@ var assert;
 if (typeof module !== 'undefined') { // for node
   assert = require('assert');
   localStorage = require('localStorage');
-  LogStorage = require('../').LogStorage;
+  LogStorage = require('../logstorage').LogStorage;
 } else {
   LogStorage = LogStorage.LogStorage;
 }

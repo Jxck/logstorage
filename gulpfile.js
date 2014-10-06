@@ -40,21 +40,23 @@ gulp.task('server', function() {
 });
 
 gulp.task('compile', function () {
-  return gulp.src(['index.ts'])
-    .pipe(typescript())
+  return gulp.src(['logstorage.ts'])
+    .pipe(typescript({
+      noImplicitAny: true
+    }))
     .pipe(gulp.dest('.'));
 });
 
 gulp.task('build', ['compile'], function() {
-  return gulp.src('index.js')
+  return gulp.src('logstorage.js')
     .pipe(browserify({
       standalone: 'LogStorage'
     }))
-    .pipe(rename('index.js'))
+    .pipe(rename('logstorage.js'))
     .pipe(gulp.dest('.'));
 });
 
 gulp.task('clean', function () {
-  return gulp.src('index.js', { read: false })
+  return gulp.src('logstorage.js', { read: false })
     .pipe(rimraf({ force: true }));
 });
