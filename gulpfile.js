@@ -50,7 +50,7 @@ gulp.task('build', ['compile'], function() {
     .pipe(browserify({
       standalone: 'LogStorage'
     }))
-    .pipe(rename('build.js'))
+    .pipe(rename('index.js'))
     .pipe(gulp.dest('.'));
 });
 
