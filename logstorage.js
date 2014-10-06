@@ -3,14 +3,24 @@
 (function (LogStorage) {
     "use strict";
 
-    var Level;
     (function (Level) {
         Level[Level["TRACE"] = 0] = "TRACE";
         Level[Level["DEBUG"] = 1] = "DEBUG";
         Level[Level["INFO"] = 2] = "INFO";
         Level[Level["WORN"] = 3] = "WORN";
         Level[Level["ERROR"] = 4] = "ERROR";
-    })(Level || (Level = {}));
+    })(LogStorage.Level || (LogStorage.Level = {}));
+    var Level = LogStorage.Level;
+
+    var Message = (function () {
+        function Message(message, timestamp, level) {
+            this.message = message;
+            this.timestamp = timestamp;
+            this.level = level;
+        }
+        return Message;
+    })();
+    LogStorage.Message = Message;
 
     var DB = (function () {
         function DB() {
@@ -26,6 +36,13 @@
 
         DB.prototype.get = function (key) {
             return JSON.parse(this.db.getItem(key));
+        };
+
+        DB.prototype.each = function (fn) {
+            for (var i = 0; i < localStorage.length; i++) {
+                var k = localStorage.key(i);
+                fn(k, this.get(k));
+            }
         };
 
         DB.prototype.clear = function () {
@@ -44,15 +61,13 @@
             var timestamp = (new Date(Date.now())).toISOString();
             var messages = Array.prototype.join.call(args, " ");
 
+            var message = new Message(messages, timestamp, level);
+
             while (this.db.get(timestamp)) {
                 timestamp += "#";
             }
 
-            console.log(timestamp, {
-                message: messages,
-                timestamp: timestamp,
-                level: level
-            });
+            this.db.set(timestamp, message);
         };
 
         Logger.prototype.trace = function () {
@@ -93,6 +108,37 @@
                 args[_i] = arguments[_i + 0];
             }
             this.write(4 /* ERROR */, args);
+        };
+
+        Logger.prototype.dump = function (level) {
+            if (typeof level === 'undefined') {
+                level = 0 /* TRACE */;
+            }
+
+            var keys = [];
+            var cache = {};
+            var values = [];
+            this.db.each(function (key, value) {
+                if (value.level > level) {
+                    return;
+                }
+                keys.push(key);
+                cache[key] = value;
+            });
+
+            keys.sort();
+
+            for (var k in keys) {
+                values.push(cache[keys[k]]);
+            }
+
+            return values;
+        };
+
+        Logger.prototype.pack = function (messages) {
+            return messages.map(function (m) {
+                return [m.timestamp, Level[m.level], m.message].join(' ');
+            }).join('\n');
         };
 
         Logger.prototype.clear = function () {

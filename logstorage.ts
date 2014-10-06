@@ -3,7 +3,7 @@
 export module LogStorage {
   "use strict";
 
-  enum Level {
+  export enum Level {
     TRACE,
     DEBUG,
     INFO,
@@ -21,9 +21,20 @@ export module LogStorage {
   }
 
   export interface IDB {
-    set(key: string, value: Object): void;
-    get(key: string): Object;
+    set(key: string, value: any): void;
+    get(key: string): any;
     clear(): void;
+  }
+
+  export class Message {
+    message: string;
+    timestamp: string;
+    level: Level;
+    constructor(message: string, timestamp: string, level: Level) {
+      this.message = message;
+      this.timestamp = timestamp;
+      this.level = level;
+    }
   }
 
   export class DB implements IDB {
@@ -37,12 +48,19 @@ export module LogStorage {
       }
     }
 
-    set(key: string, value: Object): void {
+    set(key: string, value: any): void {
       this.db.setItem(key, JSON.stringify(value));
     }
 
-    get(key: string): Object {
+    get(key: string): any {
       return JSON.parse(this.db.getItem(key));
+    }
+
+    each(fn: (key: string, value: any) => void): void {
+      for (var i: number = 0; i < localStorage.length; i++) {
+        var k: string = localStorage.key(i);
+        fn(k, this.get(k));
+      }
     }
 
     clear(): void {
@@ -63,15 +81,13 @@ export module LogStorage {
       var timestamp: string = (new Date(Date.now())).toISOString();
       var messages: string  = Array.prototype.join.call(args, " ");
 
+      var message: Message = new Message(messages, timestamp, level);
+
       while (this.db.get(timestamp)) {
         timestamp += "#";
       }
 
-      console.log(timestamp, {
-        message: messages,
-        timestamp: timestamp,
-        level: level
-      });
+      this.db.set(timestamp, message);
     }
 
     trace(...args: any[]): void {
@@ -92,6 +108,37 @@ export module LogStorage {
 
     error(...args: any[]): void {
       this.write(Level.ERROR, args);
+    }
+
+    dump(level: Level): Message[] {
+      if (typeof level === 'undefined') {
+        level = Level.TRACE;
+      }
+
+      var keys: string[] = [];
+      var cache: any = {};
+      var values: Message[] = [];
+      this.db.each(function(key, value) {
+        if (value.level > level) {
+          return;
+        }
+        keys.push(key);
+        cache[key] = value;
+      });
+
+      keys.sort();
+
+      for (var k in keys) {
+        values.push(cache[keys[k]]);
+      }
+
+      return values
+    }
+
+    private pack(messages: Message[]): string {
+      return messages.map((m: Message): string => {
+        return [m.timestamp, Level[m.level], m.message].join(' ');
+      }).join('\n');
     }
 
     clear(): void {

@@ -39,31 +39,38 @@ describe('db', function() {
     assert.deepEqual(localStorage.length, 0);
   });
 
-  //it('#each', function() {
-  //  logStorage.each(function(k, v) {
-  //    assert.deepEqual(k + 'a', v);
-  //  });
-  //});
+  // it('#each', function() {
+  //   db.each(function(k, v) {
+  //     assert.deepEqual(k + 'a', v);
+  //   });
+  // });
 });
 
-/**
-describe('logstorage', function(){
-  var namespace, logStorage;
+describe('logger', function(){
+  var namespace, logger;
   beforeEach(function() {
-    namespace = 'application';
-    logStorage = new LogStorage.LogStorage(namespace);
+    namespace = 'test';
+    logger = new LogStorage.Logger(namespace);
   });
 
   afterEach(function() {
-    logStorage.clear();
+    logger.clear();
     namespace = null;
-    logStorage = null;
+    logger = null;
   });
 
   it('constructor', function(){
-    assert.ok(!!logStorage);
-    assert.deepEqual(logStorage.namespace, namespace);
+    assert.deepEqual(logger.namespace, namespace);
   });
 
+  it('dump', function() {
+    for (var i = 0; i<10; i++) {
+      logger.debug(i, 'a'+i);
+    }
+
+    var dumped = logger.dump('Trace');
+    for (var i = 0; i<10; i++) {
+      assert.deepEqual(dumped[i].message, i + ' a'+i);
+    }
+  });
 });
-*/
