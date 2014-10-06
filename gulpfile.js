@@ -42,7 +42,8 @@ gulp.task('server', function() {
 gulp.task('compile', function () {
   return gulp.src(['logstorage.ts'])
     .pipe(typescript({
-      noImplicitAny: true
+      noImplicitAny: true,
+      declaration: true
     }))
     .pipe(gulp.dest('.'));
 });
