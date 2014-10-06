@@ -29,8 +29,8 @@ gulp.task('mocha', function() {
 
 gulp.task('mocha-phantomjs', function () {
   return gulp
-  .src('test/index.html')
-  .pipe(mochaPhantomJS());
+    .src('test/index.html')
+    .pipe(mochaPhantomJS());
 });
 
 gulp.task('server', function() {
