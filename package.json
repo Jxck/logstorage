@@ -7,9 +7,11 @@
     "test": "test"
   },
   "scripts": {
+    "install": "npm run bower && npm run build",
     "test": "gulp mocha-phantomjs && gulp mocha && echo '[notice] ******for browser test*****\n$ npm run server\n and access to http://localhost:3000 '",
     "lint": "gulp lint",
     "bower": "bower install && gulp bower",
+    "build": "gulp clean && gulp build",
     "server": "gulp server"
   },
   "repository": {
