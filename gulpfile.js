@@ -6,6 +6,7 @@ var gulp = require('gulp')
   , mochaPhantomJS = require('gulp-mocha-phantomjs')
   , connect = require('gulp-connect')
   , typescript = require('gulp-tsc')
+  , tslint = require('gulp-tslint')
   , rimraf = require('gulp-rimraf')
   , rename = require('gulp-rename')
   , browserify = require('gulp-browserify');
@@ -39,7 +40,13 @@ gulp.task('server', function() {
   });
 });
 
-gulp.task('compile', function () {
+gulp.task('tslint', function(){
+  return gulp.src('logstorage.ts')
+    .pipe(tslint())
+    .pipe(tslint.report('verbose'));
+});
+
+gulp.task('compile', ['tslint'], function () {
   return gulp.src(['logstorage.ts'])
     .pipe(typescript({
       noImplicitAny: true,
