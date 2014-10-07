@@ -21,31 +21,31 @@ export declare module LogStorage {
         clear(): void;
     }
     class Message {
-        public message: string;
-        public timestamp: string;
-        public level: Level;
+        message: string;
+        timestamp: string;
+        level: Level;
         constructor(message: string, timestamp: string, level: Level);
     }
     class DB implements IDB {
         private db;
         constructor();
-        public set(key: string, value: any): void;
-        public get(key: string): any;
-        public each(fn: (key: string, value: any) => void): void;
-        public clear(): void;
+        set(key: string, value: any): void;
+        get(key: string): any;
+        each(fn: (key: string, value: any) => void): void;
+        clear(): void;
     }
     class Logger implements ILogger {
         private namespace;
         private db;
         constructor(namespace: string);
         private write(level, args);
-        public trace(...args: any[]): void;
-        public debug(...args: any[]): void;
-        public info(...args: any[]): void;
-        public worn(...args: any[]): void;
-        public error(...args: any[]): void;
-        public dump(level: Level): Message[];
-        public pack(messages: Message[]): string;
-        public clear(): void;
+        trace(...args: any[]): void;
+        debug(...args: any[]): void;
+        info(...args: any[]): void;
+        worn(...args: any[]): void;
+        error(...args: any[]): void;
+        dump(level: Level): Message[];
+        pack(messages: Message[]): string;
+        clear(): void;
     }
 }
