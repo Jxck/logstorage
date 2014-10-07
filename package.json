@@ -1,13 +1,13 @@
 {
   "name": "logstorage",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "store log to localstorage and upload to server as file",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "install": "npm run bower && npm run build",
+    "setup": "npm run bower && npm run build",
     "test": "npm run build && gulp mocha-phantomjs && gulp mocha && echo '[notice] ******for browser test*****\n$ npm run server\n and access to http://localhost:3000 '",
     "lint": "gulp lint",
     "bower": "bower install && gulp bower",
