@@ -24,11 +24,9 @@
     "localstorage"
   ],
   "author": "Jxck",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jxck/logstorage/issues"
   },
-  "homepage": "https://github.com/Jxck/logstorage",
   "dependencies": {
     "localStorage": "^1.0.2"
   },
@@ -51,5 +49,28 @@
     "phantomjs": "^1.9.10",
     "tslint": "^0.4.12",
     "typescript": "^1.0.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "https://github.com/Jxck/logstorage",
+  "keywords": [
+    "log",
+    "storage",
+    "localstorage"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jxck/logstorage"
+  },
+  "scripts": {
+    "bower": "bower install && gulp bower",
+    "build": "gulp clean && gulp build",
+    "install": "npm run bower && npm run build",
+    "lint": "gulp lint",
+    "server": "gulp server",
+    "test": "npm run build && gulp mocha-phantomjs && gulp mocha && echo '[notice] ******for browser test*****\n$ npm run server\n and access to http://localhost:3000 '"
   }
 }

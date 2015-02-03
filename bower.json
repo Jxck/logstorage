@@ -1,19 +1,15 @@
 {
   "name": "logstorage",
-  "version": "0.0.1",
-  "homepage": "https://github.com/Jxck/logstorage",
   "description": "store log to localstorage and upload to server as file",
-  "main": "index.js",
-  "keywords": [
-    "log",
-    "storage",
-    "localstorage"
-  ],
+  "version": "0.0.1",
   "authors": [
     "Jxck"
   ],
-  "license": "MIT",
-  "private": true,
+  "dependencies": {
+    "assert": "https://github.com/Jxck/assert.git",
+    "mocha": "~1.21.4"
+  },
+  "homepage": "https://github.com/Jxck/logstorage",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -21,8 +17,12 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "assert": "https://github.com/Jxck/assert.git",
-    "mocha": "~1.21.4"
-  }
+  "keywords": [
+    "log",
+    "storage",
+    "localstorage"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "private": true
 }
