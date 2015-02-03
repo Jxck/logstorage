@@ -14,10 +14,10 @@ export module LogStorage {
   export interface ILogger {
     trace(...args: any[]): void;
     debug(...args: any[]): void;
-    info(...args: any[]): void;
-    worn(...args: any[]): void;
+    info(...args: any[]):  void;
+    worn(...args: any[]):  void;
     error(...args: any[]): void;
-    clear(): void;
+    clear():               void;
   }
 
   export interface IDB {
@@ -27,13 +27,13 @@ export module LogStorage {
   }
 
   export class Message {
-    message: string;
+    message:   string;
     timestamp: string;
-    level: Level;
+    level:     Level;
     constructor(message: string, timestamp: string, level: Level) {
-      this.message = message;
+      this.message   = message;
       this.timestamp = timestamp;
-      this.level = level;
+      this.level     = level;
     }
   }
 
@@ -70,16 +70,16 @@ export module LogStorage {
 
   export class Logger implements ILogger {
     private namespace: string;
-    private db: DB;
+    private db:        DB;
 
     constructor(namespace: string) {
       this.namespace = namespace;
-      this.db = new DB();
+      this.db        = new DB();
     }
 
     private write(level: Level, args: any[]): void {
       var timestamp: string = (new Date(Date.now())).toISOString();
-      var messages: string  = Array.prototype.join.call(args, " ");
+      var messages:  string = Array.prototype.join.call(args, " ");
 
       var message: Message = new Message(messages, timestamp, level);
 
@@ -115,8 +115,8 @@ export module LogStorage {
         level = Level.TRACE;
       }
 
-      var keys: string[] = [];
-      var cache: any = {};
+      var keys: string[]    = [];
+      var cache: any        = {};
       var values: Message[] = [];
       this.db.each((key: string, value: Message): void => {
         if (value.level > level) {
