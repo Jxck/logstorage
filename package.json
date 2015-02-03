@@ -28,7 +28,7 @@
     "url": "https://github.com/Jxck/logstorage/issues"
   },
   "dependencies": {
-    "localStorage": "^1.0.2"
+    "localStorage": "^1.0.3"
   },
   "devDependencies": {
     "bower": "^1.3.12",
