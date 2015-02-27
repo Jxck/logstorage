@@ -1,70 +1,88 @@
-function Logger(category) {
+function Logger(category, format) {
   this.slice = Array.prototype.slice;
   this.category = category;
   this.out = {
-    fatal: console.fatal || console.log,
-    error: console.error || console.log,
-    warn : console.warn  || console.log,
-    info : console.info  || console.log,
-    debug: console.debug || console.log,
-    trace: console.trace || console.log
+    FATAL: console.fatal || console.log,
+    ERROR: console.error || console.log,
+    WARN : console.warn  || console.log,
+    INFO : console.info  || console.log,
+    DEBUG: console.debug || console.log,
+    TRACE: console.trace || console.log
   }
 
-  // pre concat LogLevel + Category + '-'
-  this._fatal = '[FATAL] ' + this.category + ' -';
-  this._error = '[ERROR] ' + this.category + ' -';
-  this._warn  = '[WARN] '  + this.category + ' -';
-  this._info  = '[INFO] '  + this.category + ' -';
-  this._debug = '[DEBUG] ' + this.category + ' -';
-  this._trace = '[TRACE] ' + this.category + ' -';
+  this.format = format || "%date [%level] %category [%file] - %message";
 }
 
-Logger.getLogger = function(category) {
-  return new Logger(category);
+Logger.getLogger = function(category, format) {
+  return new Logger(category, format);
 }
 
-// override for change timestamp format
 Logger.prototype._time = function() {
-  return '[' + new Date().toISOString() + ']';
+  return new Date().toISOString();
 }
 
-Logger.prototype._save = function(line) {
+Logger.prototype._file = function () {
+  // get the stack trace
+  var trace = (new Error()).stack.split('\n')[1];
+  // extract file path
+  var file = /\((.*?)\)/.exec(trace)[1];
+  // return only file name and line number
+  return file.split('/').pop();
+}
+
+Logger.prototype._write = function(level, args) {
+  var log = this.format;
+  log = log.replace("%date", this._time());
+  log = log.replace("%category", this.category);
+  log = log.replace("%level", level);
+  log = log.replace("%file", this._file());
+
+  var message = args.map(function(arg) {
+    if (!arg) return '';
+
+    if (typeof arg === 'string') {
+      return arg
+    }
+
+    if (['number', 'function'].indexOf(typeof arg) > 0) {
+      return arg.toString();
+    }
+
+    return JSON.stringify(arg);
+  }).join(' ');
+  log = log.replace("%message", message);
+
+  this.out[level].call(console, log);
 }
 
 Logger.prototype.fatal = function() {
-  var line = [this._time(), this._fatal].concat(this.slice.call(arguments));
-  this.out.fatal.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('FATAL', args);
 }
 
 Logger.prototype.error = function() {
-  var line = [this._time(), this._error].concat(this.slice.call(arguments));
-  this.out.error.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('ERROR', args);
 }
 
 Logger.prototype.warn = function() {
-  var line = [this._time(), this._warn].concat(this.slice.call(arguments));
-  this.out.warn.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('WARN', args);
 }
 
 Logger.prototype.info = function() {
-  var line = [this._time(), this._info].concat(this.slice.call(arguments));
-  this.out.info.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('INFO', args);
 }
 
 Logger.prototype.debug = function() {
-  var line = [this._time(), this._debug].concat(this.slice.call(arguments));
-  this.out.debug.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('DEBUG', args);
 }
 
 Logger.prototype.trace = function() {
-  var line = [this._time(), this._trace].concat(this.slice.call(arguments));
-  this.out.trace.apply(console, line);
-  this._save(line);
+  var args = this.slice.call(arguments);
+  this._write('TRACE', args);
 }
 
 var logger = Logger.getLogger('APP');
