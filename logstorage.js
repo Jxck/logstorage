@@ -86,12 +86,12 @@ Logger.prototype.trace = function() {
   this._write('TRACE', args);
 }
 
-var format = '[%date] %level %category (%file) - %message';
+var format = '[%date] %category %level (%file) - %message';
 var logger = Logger.getLogger('APP', format);
 var a = { hoge: 100 };
-logger.fatal('the value of hoge', a, 'is', 100);
-logger.error('the value of hoge', a, 'is', 100);
-logger.warn('the value of hoge', a, 'is', 100);
-logger.info('the value of hoge', a, 'is', 100);
-logger.debug('the value of hoge', a, 'is', 100);
-logger.trace('the value of hoge', a, 'is', 100);
+logger.fatal('the value of "hoge" at', a, 'is', 100);
+logger.error('the value of "hoge" at', a, 'is', 100);
+logger.warn( 'the value of "hoge" at', a, 'is', 100);
+logger.info( 'the value of "hoge" at', a, 'is', 100);
+logger.debug('the value of "hoge" at', a, 'is', 100);
+logger.trace('the value of "hoge" at', a, 'is', 100);
