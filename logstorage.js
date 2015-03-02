@@ -39,8 +39,10 @@ function Logger(category, option) {
 
   if (option.storage) {
     if (option.storage.type === 'localStorage' && typeof localStorage !== 'undefined') {
-      var limit = option.limit || 1 * 100 * 1000; // 100K
-      var key = option.key || 'logstorage';
+      var limit = option.storage.limit || 20 * 1000; // 20K
+      if (limit > 20 * 2000) throw new Error('not recommend over 20K to log storage limit for localStorage');
+
+      var key = option.storage.key || 'logstorage';
       this._save = function(log) {
         setTimeout(function() {
           var saved = localStorage.getItem(key);
@@ -134,11 +136,12 @@ Logger.prototype.trace = function() {
 
 var format = '[%date] %category %level (%file) - %message';
 var appLogger = Logger.getLogger('APP', {
+  loglevel: 'FATAL',
   format: format,
   storage: {
     type: 'localStorage',
     key: 'log',
-    limit: 10000,
+    limit: 1000 * 10 // 10K
   }
 });
 
