@@ -75,6 +75,24 @@ Logger.prototype._write = function(level, args) {
   log = log.replace('%message', message);
 
   this.out[level].call(console, log);
+
+  this._save(log);
+}
+
+Logger.prototype._save = function(log) {
+  if (typeof localStorage === undefined) {
+    var MAXSIZE = 2000;
+    setTimeout(function() {
+      var saved = localStorage.getItem('logstorage');
+      saved = (saved || '') + log + '\n';
+      if (saved.length > MAXSIZE) {
+        var logs = saved.split('\n');
+        var start = logs.length * 0.5;
+        saved = logs.slice(start).join('\n');
+      }
+      localStorage.setItem('logstorage', saved);
+    }, 0);
+  }
 }
 
 Logger.prototype.fatal = function() {
@@ -116,9 +134,3 @@ appLogger.info( 'the value of "hoge" at', a, 'is', 100);
 appLogger.warn( 'the value of "hoge" at', a, 'is', 100);
 appLogger.error('the value of "hoge" at', a, 'is', 100);
 appLogger.fatal('the value of "hoge" at', a, 'is', 100);
-
-
-var systemLogger = Logger.getLogger('SYSTEM');
-var a = { hoge: 100 };
-systemLogger.fatal('the value of "hoge" at', a, 'is', 100);
-systemLogger.debug('the value of "hoge" at', a, 'is', 100);
