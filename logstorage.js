@@ -2,6 +2,8 @@ function Logger(category, option) {
   this.slice = Array.prototype.slice;
   this.category = category;
 
+  option = option || {};
+
   var noop = function(){};
   this.out = {
     TRACE: noop,
@@ -12,7 +14,7 @@ function Logger(category, option) {
     FATAL: noop,
   }
 
-  loglevel = option.loglevel || 'TRACE';
+  var loglevel = option.loglevel || 'TRACE';
   switch (loglevel){
     case 'TRACE':
       this.out.TRACE = console.trace || console.log;
@@ -106,7 +108,7 @@ Logger.prototype.trace = function() {
 }
 
 var format = '[%date] %category %level (%file) - %message';
-var appLogger = Logger.getLogger('APP', format);
+var appLogger = Logger.getLogger('APP', { format: format });
 var a = { hoge: 100 };
 appLogger.trace('the value of "hoge" at', a, 'is', 100);
 appLogger.debug('the value of "hoge" at', a, 'is', 100);
@@ -116,7 +118,7 @@ appLogger.error('the value of "hoge" at', a, 'is', 100);
 appLogger.fatal('the value of "hoge" at', a, 'is', 100);
 
 
-var systemLogger = Logger.getLogger('SYSTEM', format);
+var systemLogger = Logger.getLogger('SYSTEM');
 var a = { hoge: 100 };
 systemLogger.fatal('the value of "hoge" at', a, 'is', 100);
 systemLogger.debug('the value of "hoge" at', a, 'is', 100);
