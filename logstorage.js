@@ -10,7 +10,7 @@ function Logger(category, format) {
     TRACE: console.trace || console.log
   }
 
-  this.format = format || "%date [%level] %category [%file] - %message";
+  this.format = format || '%date [%level] %category [%file] - %message';
 }
 
 Logger.getLogger = function(category, format) {
@@ -32,10 +32,10 @@ Logger.prototype._file = function () {
 
 Logger.prototype._write = function(level, args) {
   var log = this.format;
-  log = log.replace("%date", this._date());
-  log = log.replace("%category", this.category);
-  log = log.replace("%level", level);
-  log = log.replace("%file", this._file());
+  log = log.replace('%date', this._date());
+  log = log.replace('%category', this.category);
+  log = log.replace('%level', level);
+  log = log.replace('%file', this._file());
 
   var message = args.map(function(arg) {
     if (!arg) return '';
@@ -50,7 +50,7 @@ Logger.prototype._write = function(level, args) {
 
     return JSON.stringify(arg);
   }).join(' ');
-  log = log.replace("%message", message);
+  log = log.replace('%message', message);
 
   this.out[level].call(console, log);
 }
@@ -85,7 +85,8 @@ Logger.prototype.trace = function() {
   this._write('TRACE', args);
 }
 
-var logger = Logger.getLogger('APP');
+var format = '[%date] %level %category (%file) - %message';
+var logger = Logger.getLogger('APP', format);
 var a = { hoge: 100 };
 logger.fatal('the value of hoge', a, 'is', 100);
 logger.error('the value of hoge', a, 'is', 100);
