@@ -12,7 +12,7 @@
     "install": "npm run bower && npm run build",
     "lint": "eslint logstorage.js sample/*.js test/*.js",
     "server": "gulp server",
-    "test": "npm run build && gulp mocha-phantomjs && gulp mocha && echo '[notice] ******for browser test*****\n$ npm run server\n and access to http://localhost:3000 '"
+    "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
