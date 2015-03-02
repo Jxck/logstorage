@@ -17,7 +17,7 @@ Logger.getLogger = function(category, format) {
   return new Logger(category, format);
 }
 
-Logger.prototype._time = function() {
+Logger.prototype._date = function() {
   return new Date().toISOString();
 }
 
@@ -32,7 +32,7 @@ Logger.prototype._file = function () {
 
 Logger.prototype._write = function(level, args) {
   var log = this.format;
-  log = log.replace("%date", this._time());
+  log = log.replace("%date", this._date());
   log = log.replace("%category", this.category);
   log = log.replace("%level", level);
   log = log.replace("%file", this._file());
