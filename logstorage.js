@@ -1,13 +1,32 @@
-function Logger(category, format) {
+function Logger(category, format, loglevel) {
   this.slice = Array.prototype.slice;
   this.category = category;
+
+  var noop = function(){};
   this.out = {
-    FATAL: console.fatal || console.log,
-    ERROR: console.error || console.log,
-    WARN : console.warn  || console.log,
-    INFO : console.info  || console.log,
-    DEBUG: console.debug || console.log,
-    TRACE: console.trace || console.log
+    TRACE: noop,
+    DEBUG: noop,
+    INFO : noop,
+    WARN : noop,
+    ERROR: noop,
+    FATAL: noop,
+  }
+
+  loglevel = loglevel || 'TRACE';
+  switch (loglevel){
+    case 'TRACE':
+      this.out.TRACE = console.trace || console.log;
+    case 'DEBUG':
+      this.out.DEBUG = console.debug || console.log;
+    case 'INFO':
+      this.out.INFO = console.info  || console.log;
+    case 'WARN':
+      this.out.WARN = console.warn  || console.log;
+    case 'ERROR':
+      this.out.ERROR = console.error || console.log;
+    case 'FATAL':
+      this.out.FATAL = console.fatal || console.log;
+    default:
   }
 
   this.format = format || '%date [%level] %category [%file] - %message';
@@ -89,9 +108,9 @@ Logger.prototype.trace = function() {
 var format = '[%date] %category %level (%file) - %message';
 var logger = Logger.getLogger('APP', format);
 var a = { hoge: 100 };
-logger.fatal('the value of "hoge" at', a, 'is', 100);
-logger.error('the value of "hoge" at', a, 'is', 100);
-logger.warn( 'the value of "hoge" at', a, 'is', 100);
-logger.info( 'the value of "hoge" at', a, 'is', 100);
-logger.debug('the value of "hoge" at', a, 'is', 100);
 logger.trace('the value of "hoge" at', a, 'is', 100);
+logger.debug('the value of "hoge" at', a, 'is', 100);
+logger.info( 'the value of "hoge" at', a, 'is', 100);
+logger.warn( 'the value of "hoge" at', a, 'is', 100);
+logger.error('the value of "hoge" at', a, 'is', 100);
+logger.fatal('the value of "hoge" at', a, 'is', 100);
