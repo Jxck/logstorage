@@ -15,23 +15,46 @@ function Logger(category, option) {
   }
 
   var loglevel = option.loglevel || 'TRACE';
+  var defaultlog = console.log;
   switch (loglevel){
     case 'TRACE':
-      this.out.TRACE = console.trace || console.log;
+      this.out.TRACE = console.trace || defaultlog;
     case 'DEBUG':
-      this.out.DEBUG = console.debug || console.log;
+      this.out.DEBUG = console.debug || defaultlog;
     case 'INFO':
-      this.out.INFO = console.info  || console.log;
+      this.out.INFO = console.info || defaultlog;
     case 'WARN':
-      this.out.WARN = console.warn  || console.log;
+      this.out.WARN = console.warn || defaultlog;
     case 'ERROR':
-      this.out.ERROR = console.error || console.log;
+      this.out.ERROR = console.error || defaultlog;
     case 'FATAL':
-      this.out.FATAL = console.fatal || console.log;
+      this.out.FATAL = console.fatal || defaultlog;
     default:
   }
 
   this.format = option.format || '%date [%level] %category [%file] - %message';
+
+
+  this._save = noop;
+
+  if (option.storage) {
+    if (option.storage.type === 'localStorage' && typeof localStorage !== 'undefined') {
+      var limit = option.limit || 1 * 100 * 1000; // 100K
+      var key = option.key || 'logstorage';
+      this._save = function(log) {
+        setTimeout(function() {
+          var saved = localStorage.getItem(key);
+          saved = (saved || '') + log + '\n';
+          if (saved.length > limit) {
+            var logs = saved.split('\n');
+            var start = logs.length * 0.5;
+            saved = logs.slice(start).join('\n');
+          }
+          localStorage.setItem(key, saved);
+        }, 0);
+      }
+    }
+  }
 }
 
 Logger.getLogger = function(category, option) {
@@ -79,22 +102,6 @@ Logger.prototype._write = function(level, args) {
   this._save(log);
 }
 
-Logger.prototype._save = function(log) {
-  if (typeof localStorage === undefined) {
-    var MAXSIZE = 2000;
-    setTimeout(function() {
-      var saved = localStorage.getItem('logstorage');
-      saved = (saved || '') + log + '\n';
-      if (saved.length > MAXSIZE) {
-        var logs = saved.split('\n');
-        var start = logs.length * 0.5;
-        saved = logs.slice(start).join('\n');
-      }
-      localStorage.setItem('logstorage', saved);
-    }, 0);
-  }
-}
-
 Logger.prototype.fatal = function() {
   var args = this.slice.call(arguments);
   this._write('FATAL', args);
@@ -126,7 +133,15 @@ Logger.prototype.trace = function() {
 }
 
 var format = '[%date] %category %level (%file) - %message';
-var appLogger = Logger.getLogger('APP', { format: format });
+var appLogger = Logger.getLogger('APP', {
+  format: format,
+  storage: {
+    type: 'localStorage',
+    key: 'log',
+    limit: 10000,
+  }
+});
+
 var a = { hoge: 100 };
 appLogger.trace('the value of "hoge" at', a, 'is', 100);
 appLogger.debug('the value of "hoge" at', a, 'is', 100);
