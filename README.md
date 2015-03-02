@@ -1,18 +1,31 @@
 # LogStorage
 
-store your log to localstorage.
-and upload it via XHR as File.
+isomorphic logger.
+you can also save to localStorage.
 
 ## API
 
 ```js
-var logger = new LogStorage.Logger('your name space');
-logger.trace('trace log');
-logger.debug('debug log');
-logger.info('info log');
-logger.worn('worn log');
-logger.error('error log');
-logger.clear();
+var Logger = Logger || require('../logstorage.js').Logger;
+
+var format = '[%date] %category %level (%file) - %message';
+var appLogger = Logger.getLogger('APP', {
+  loglevel: 'FATAL',
+  format: format,
+  storage: {
+    type: 'localStorage',
+    key: 'log',
+    limit: 1000 * 10 // 10K
+  }
+});
+
+var a = { hoge: 100 };
+appLogger.trace('the value of "hoge" at', a, 'is', 100);
+appLogger.debug('the value of "hoge" at', a, 'is', 100);
+appLogger.info('the value of "hoge" at', a, 'is', 100);
+appLogger.warn('the value of "hoge" at', a, 'is', 100);
+appLogger.error('the value of "hoge" at', a, 'is', 100);
+appLogger.fatal('the value of "hoge" at', a, 'is', 100);
 ```
 
 ## install & commands
@@ -28,17 +41,7 @@ you can call all build task from npm run-scripts.
 $ npm install
 $ npm test
 $ npm lint
-$ npm bower
-$ npm build
-$ npm server
 ```
-
-## contribution
-
-- written in typescript.
-- compile as commonjs module style.
-- browserify it for browser.
-- testing it in mocha.
 
 ## License
 
