@@ -1,58 +1,33 @@
 {
-  "name": "logstorage",
-  "version": "0.0.3",
-  "description": "store log to localstorage and upload to server as file",
+  "name": "logmorphic",
+  "version": "0.0.1",
+  "description": "isomorphic logger library",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "bower": "bower install && gulp bower",
-    "build": "gulp clean && gulp build",
-    "install": "npm run bower && npm run build",
-    "lint": "eslint logstorage.js sample/*.js test/*.js",
-    "server": "gulp server",
+    "lint": "eslint index.js sample/*.js test/*.js",
     "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jxck/logstorage"
+    "url": "https://github.com/Jxck/logmorphic"
   },
   "keywords": [
     "log",
-    "storage",
+    "isomorphic",
     "localstorage"
   ],
   "author": "Jxck",
   "bugs": {
-    "url": "https://github.com/Jxck/logstorage/issues"
-  },
-  "dependencies": {
-    "localStorage": "^1.0.3"
+    "url": "https://github.com/Jxck/logmorphic/issues"
   },
   "devDependencies": {
-    "bower": "^1.3.12",
     "eslint": "^0.15.1",
     "eslint-plugin-no-func-space": "0.0.1",
     "eslint-plugin-nodeca": "^1.0.3",
-    "gulp": "^3.8.8",
-    "gulp-browserify": "^0.5.0",
-    "gulp-connect": "^2.0.6",
-    "gulp-jshint": "^1.8.4",
-    "gulp-mocha": "^1.1.0",
-    "gulp-mocha-phantomjs": "^0.5.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-rimraf": "^0.1.0",
-    "gulp-tsc": "^0.9.2",
-    "gulp-tslint": "^1.3.1",
-    "jshint-stylish": "^0.4.0",
-    "main-bower-files": "^2.0.0",
-    "mocha": "^1.21.4",
-    "mocha-phantomjs": "^3.5.0",
-    "phantomjs": "^1.9.10",
-    "tslint": "^0.4.12",
-    "typescript": "^1.0.1"
   },
-  "homepage": "https://github.com/Jxck/logstorage",
+  "homepage": "https://github.com/Jxck/logmorphic",
   "license": "MIT"
 }
