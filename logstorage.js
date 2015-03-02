@@ -50,6 +50,7 @@ Logger.prototype._write = function(level, args) {
 
     return JSON.stringify(arg);
   }).join(' ');
+
   log = log.replace('%message', message);
 
   this.out[level].call(console, log);
