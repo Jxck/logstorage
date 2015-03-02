@@ -46,7 +46,11 @@ function Logger(category, option) {
       this._save = function(log) {
         setTimeout(function() {
           var saved = localStorage.getItem(key);
-          saved = (saved || '') + log + '\n';
+          if (saved) {
+            saved = saved + '\n' + log;
+          } else {
+            saved = log;
+          }
           if (saved.length > limit) {
             var logs = saved.split('\n');
             var start = logs.length * 0.5;
@@ -133,3 +137,5 @@ Logger.prototype.trace = function() {
   var args = this.slice.call(arguments);
   this._write('TRACE', args);
 }
+
+this.Logger = Logger;
