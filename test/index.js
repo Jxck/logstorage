@@ -1,4 +1,4 @@
-var Logger = Logger || require('../logstorage').Logger;
+var Logger = Logger || require('../').Logger;
 
 var consolelog = console.log.bind(console);
 
