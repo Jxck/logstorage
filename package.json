@@ -1,24 +1,7 @@
 {
   "name": "logmorphic",
+  "description": "isomorphic logger library supports saving log to browser storage",
   "version": "0.0.1",
-  "description": "isomorphic logger library",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "lint": "eslint index.js sample/*.js test/*.js",
-    "test": "node test/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Jxck/logmorphic"
-  },
-  "keywords": [
-    "log",
-    "isomorphic",
-    "localstorage"
-  ],
   "author": "Jxck",
   "bugs": {
     "url": "https://github.com/Jxck/logmorphic/issues"
@@ -26,8 +9,25 @@
   "devDependencies": {
     "eslint": "^0.15.1",
     "eslint-plugin-no-func-space": "0.0.1",
-    "eslint-plugin-nodeca": "^1.0.3",
+    "eslint-plugin-nodeca": "^1.0.3"
+  },
+  "directories": {
+    "test": "test"
   },
   "homepage": "https://github.com/Jxck/logmorphic",
-  "license": "MIT"
+  "keywords": [
+    "isomorphic",
+    "localstorage",
+    "log"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jxck/logmorphic"
+  },
+  "scripts": {
+    "lint": "eslint index.js sample/*.js test/*.js",
+    "test": "node test/index.js"
+  }
 }
