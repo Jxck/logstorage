@@ -4,19 +4,22 @@ function Logger(category, option) {
 
   option = option || {};
 
-  var noop = function(){};
+  var noop = function() {};
+
   this.out = {
     TRACE: noop,
     DEBUG: noop,
-    INFO : noop,
-    WARN : noop,
+    INFO: noop,
+    WARN: noop,
     ERROR: noop,
-    FATAL: noop,
-  }
+    FATAL: noop
+  };
 
   var loglevel = option.loglevel || 'TRACE';
   var defaultlog = console.log;
-  switch (loglevel){
+
+  switch (loglevel) {
+    // use fallthrough for loglevel
     case 'TRACE':
       this.out.TRACE = console.trace || defaultlog;
     case 'DEBUG':
@@ -33,7 +36,6 @@ function Logger(category, option) {
   }
 
   this.format = option.format || '%date [%level] %category [%file] - %message';
-
 
   this._save = noop;
 
@@ -58,27 +60,27 @@ function Logger(category, option) {
           }
           localStorage.setItem(key, saved);
         }, 0);
-      }
+      };
     }
   }
 }
 
 Logger.getLogger = function(category, option) {
   return new Logger(category, option);
-}
+};
 
 Logger.prototype._date = function() {
   return new Date().toISOString();
-}
+};
 
-Logger.prototype._file = function () {
+Logger.prototype._file = function() {
   // get the stack trace
   var trace = (new Error()).stack.split('\n')[1];
   // extract file path
   var file = /\((.*?)\)/.exec(trace)[1];
   // return only file name and line number
   return file.split('/').pop();
-}
+};
 
 Logger.prototype._write = function(level, args) {
   var log = this.format;
@@ -91,10 +93,10 @@ Logger.prototype._write = function(level, args) {
     if (!arg) return '';
 
     if (typeof arg === 'string') {
-      return arg
+      return arg;
     }
 
-    if (['number', 'function'].indexOf(typeof arg) > 0) {
+    if ([ 'number', 'function' ].indexOf(typeof arg) > 0) {
       return arg.toString();
     }
 
@@ -106,36 +108,36 @@ Logger.prototype._write = function(level, args) {
   this.out[level].call(console, log);
 
   this._save(log);
-}
+};
 
 Logger.prototype.fatal = function() {
   var args = this.slice.call(arguments);
   this._write('FATAL', args);
-}
+};
 
 Logger.prototype.error = function() {
   var args = this.slice.call(arguments);
   this._write('ERROR', args);
-}
+};
 
 Logger.prototype.warn = function() {
   var args = this.slice.call(arguments);
   this._write('WARN', args);
-}
+};
 
 Logger.prototype.info = function() {
   var args = this.slice.call(arguments);
   this._write('INFO', args);
-}
+};
 
 Logger.prototype.debug = function() {
   var args = this.slice.call(arguments);
   this._write('DEBUG', args);
-}
+};
 
 Logger.prototype.trace = function() {
   var args = this.slice.call(arguments);
   this._write('TRACE', args);
-}
+};
 
 this.Logger = Logger;
