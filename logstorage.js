@@ -1,4 +1,4 @@
-function Logger(category, format, loglevel) {
+function Logger(category, option) {
   this.slice = Array.prototype.slice;
   this.category = category;
 
@@ -12,7 +12,7 @@ function Logger(category, format, loglevel) {
     FATAL: noop,
   }
 
-  loglevel = loglevel || 'TRACE';
+  loglevel = option.loglevel || 'TRACE';
   switch (loglevel){
     case 'TRACE':
       this.out.TRACE = console.trace || console.log;
@@ -29,11 +29,11 @@ function Logger(category, format, loglevel) {
     default:
   }
 
-  this.format = format || '%date [%level] %category [%file] - %message';
+  this.format = option.format || '%date [%level] %category [%file] - %message';
 }
 
-Logger.getLogger = function(category, format) {
-  return new Logger(category, format);
+Logger.getLogger = function(category, option) {
+  return new Logger(category, option);
 }
 
 Logger.prototype._date = function() {
@@ -106,11 +106,17 @@ Logger.prototype.trace = function() {
 }
 
 var format = '[%date] %category %level (%file) - %message';
-var logger = Logger.getLogger('APP', format);
+var appLogger = Logger.getLogger('APP', format);
 var a = { hoge: 100 };
-logger.trace('the value of "hoge" at', a, 'is', 100);
-logger.debug('the value of "hoge" at', a, 'is', 100);
-logger.info( 'the value of "hoge" at', a, 'is', 100);
-logger.warn( 'the value of "hoge" at', a, 'is', 100);
-logger.error('the value of "hoge" at', a, 'is', 100);
-logger.fatal('the value of "hoge" at', a, 'is', 100);
+appLogger.trace('the value of "hoge" at', a, 'is', 100);
+appLogger.debug('the value of "hoge" at', a, 'is', 100);
+appLogger.info( 'the value of "hoge" at', a, 'is', 100);
+appLogger.warn( 'the value of "hoge" at', a, 'is', 100);
+appLogger.error('the value of "hoge" at', a, 'is', 100);
+appLogger.fatal('the value of "hoge" at', a, 'is', 100);
+
+
+var systemLogger = Logger.getLogger('SYSTEM', format);
+var a = { hoge: 100 };
+systemLogger.fatal('the value of "hoge" at', a, 'is', 100);
+systemLogger.debug('the value of "hoge" at', a, 'is', 100);
