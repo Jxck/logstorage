@@ -1,7 +1,6 @@
 {
   "name": "logmorphic",
   "description": "isomorphic logger library supports saving log to browser storage",
-  "version": "0.0.1",
   "authors": [
     "Jxck"
   ],
